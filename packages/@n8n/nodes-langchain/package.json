@@ -97,6 +97,7 @@
       "dist/nodes/tools/ToolHttpRequest/ToolHttpRequest.node.js",
       "dist/nodes/tools/ToolSerpApi/ToolSerpApi.node.js",
       "dist/nodes/tools/ToolVectorStore/ToolVectorStore.node.js",
+      "dist/nodes/tools/ToolWhisper/ToolWhisper.node.js",
       "dist/nodes/tools/ToolWikipedia/ToolWikipedia.node.js",
       "dist/nodes/tools/ToolWolframAlpha/ToolWolframAlpha.node.js",
       "dist/nodes/tools/ToolWorkflow/ToolWorkflow.node.js",

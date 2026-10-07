@@ -58,8 +58,17 @@ async function extractBinaryMessages(ctx: IExecuteFunctions) {
 				};
 			}),
 	);
+	// The model can't hear audio directly, so let it know an audio file is attached
+	// and can be transcribed with a connected tool (e.g. the Whisper tool)
+	const audioMessages = Object.entries(binaryData)
+		.filter(([, data]) => data.mimeType.startsWith('audio/'))
+		.map(([key, data]) => ({
+			type: 'text',
+			text: `[Audio file attached in binary field "${key}" (${data.fileName ?? data.mimeType}). Use an audio transcription tool to listen to it.]`,
+		}));
+
 	return new HumanMessage({
-		content: [...binaryMessages],
+		content: [...binaryMessages, ...audioMessages],
 	});
 }
 /**
@@ -260,7 +269,9 @@ export async function toolsAgentExecute(this: IExecuteFunctions): Promise<INodeE
 	const hasBinaryData = this.getInputData()?.[0]?.binary !== undefined;
 	if (hasBinaryData && passthroughBinaryImages) {
 		const binaryMessage = await extractBinaryMessages(this);
-		messages.push(binaryMessage);
+		if (binaryMessage.content.length > 0) {
+			messages.push(binaryMessage);
+		}
 	}
 	// We add the agent scratchpad last, so that the agent will not run in loops
 	// by adding binary messages between each interaction
